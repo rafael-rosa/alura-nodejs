@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Listagem de produtos</title>
+</head>
+<body>
+	<table border="1px">
+		<tr>
+			<td>id</td>
+			<td>título</td>
+			<td>descrição</td>
+			<td>preço</td>
+			<td></td>
+		</tr>
+		<%for(var i=0; i < lista.length; i++){%>
+			<tr>
+				<td><%=lista[i].id%></td>
+				<td><%=lista[i].titulo%></td>
+				<td><%=lista[i].descricao%></td>
+				<td><%=lista[i].preco%></td>
+				<td>
+					<!-- method-override - Fingimos realizar uma requisição POST, passando na URL da action o parâmetro “_method” com valor “DELETE" -->
+					<form action="produtos?_method=DELETE" method="post">
+						<input type="hidden" name="id" id="id" value="<%=lista[i].id%>"/>
+						<input type="submit" value="Excluir">
+					</form>
+				</td>
+			</tr>
+		<%}%>
+	</table>
+</body>
+</html>
