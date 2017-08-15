@@ -18,6 +18,31 @@ function createDBConnection(){
 				database:'casadocodigo_nodejs_test'
 			});
 	}
+	if (process.env.NODE_ENV == 'production') { //heroku define automaticamente como production
+
+		//Se deixarmos os dados da conexao com o BD chapados no codigo e 
+		//subirmos nosso projeto em um repositorio publico, todos terao acesso ao banco!!
+		var urlDeConexao = process.env.CLEARDB_DATABASE_URL;
+		var dadosConexao = urlDeConexao.match(/mysql:\/\/(.*):(.*)@(.*)\/(.*)\?reconnect=true/);
+		/*
+		Explicando a regex: toda regex deve comecar com / e finalizar com /
+			1.Vai começar com mysql: com duas // escapadas \/\/
+			2.Depois das barras vem o login (.*) indica que queremos pegar este grupo que tem qualquer caracter 
+			  repetido um numero x de vezes até encontrar o :
+			3.Depois dos : vem um outro grupo de caracteres que queremos pegar que é a senha (ate o @)
+			4.Depois vem o host ate a /
+			5.Depois vem o nome do banco (ate o ?)
+
+			O match devolve um array e a primeira posicao e a string inteira, entao a 0 = 1
+		*/
+
+		return mysql.createConnection({
+				host:dadosConexao[3],
+				user:dadosConexao[1],
+				password:dadosConexao[2],
+				database:dadosConexao[4]
+			});
+	}
 }
 
 /*
