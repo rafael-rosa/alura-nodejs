@@ -12,6 +12,7 @@ var io = require("socket.io")(http);
 
 //var rotasProdutos = require("./app/routes/produtos")(app); //Carregado via express-load
 
+
 var porta = process.env.PORT || 3000; //Se o heroku nao definiu a porta, use a 3000
 
 app.set('io',io); //estamos fazendo isto para poder disponibilizar o objeto do socket io para toda a aplicacao (promocao.js)
