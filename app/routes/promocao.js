@@ -24,8 +24,6 @@ module.exports = function(app){
 		produtosDAO.consulta(promocao.livro.id,function(error,results){
 			if(results.length > 0){
 				promocao.titulo = results[0].titulo;
-			
-				console.log(promocao);
 				io.emit('novaPromocao',promocao);
 			}
 

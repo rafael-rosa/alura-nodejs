@@ -1,6 +1,7 @@
-/*executar definindo a var de ambiente no Windows: 
-1.set NODE_ENV=test ou development 
-2.node app
+/*
+  executar definindo a var de ambiente no Windows: 
+  1.set NODE_ENV=test ou development 
+  2.node app
 */
 var app = require("./config/express")();
 var http = require("http").Server(app);
@@ -20,8 +21,8 @@ app.set('io',io); //estamos fazendo isto para poder disponibilizar o objeto do s
 //Apos passar o express como parametro para o http, podemos chamar a funcao listen do http ao inves da funcao do express (app.listen)
 var server = http.listen(porta,function(){
 
-	var host = server.address().address;
+	//var host = server.address().address;
 	var port = server.address().port;
 
-	console.log("Servidor rodando em http://%s:%s", host, port);
+	console.log("Servidor rodando na porta %s", port);
 });

@@ -3,7 +3,6 @@
 module.exports = function(app){
 	//boa pratica: o nome da operacao ja indica o que sera retornado. Como o verbo de acesso e GET e a url e /produtos, da pra saber que serao retornados produtos
 	app.get("/produtos",function(request,response,next){ //next é uma função que é o fluxo das funções que foram executadas no express:
-		console.log("abrindo lista de produtos");
 		
 		//var connection = connectionFactory(); //sem o require, connectionFactory nao existe mais neste contexto
 		var connection = app.infra.connectionFactory(); //o express-load disponibiliza o objeto desta forma apos carrega-lo
@@ -31,12 +30,10 @@ module.exports = function(app){
 			response.format({
 				html : function(){
 					//response.send(results);
-					console.log('html');
 		            response.render('produtos/lista', {lista: results});					
 				},
 
 				json : function(){
-					console.log('json');
 					response.json(results);
 				}
 				
@@ -52,7 +49,6 @@ module.exports = function(app){
 
 	//O codigo responsavel por tratar as requisicoes do sistema e conhecido como CONTROLLER (ou handles)
 	app.get("/produtos/form",function(request,response){
-		console.log('abrindo formulario de cadastro de produtos');
 		response.render('produtos/form',{
 									errosValidacao:{}
 									,produto:{}
@@ -121,8 +117,6 @@ module.exports = function(app){
 				da validacao acima iria parar a execucao e ele nao tentaria gravar no banco caso houvesse erro de validacao. Nao funcionou.
 				Tentei gravar o erro em uma variavel e depois checar se ela estaria diferente de nulo para nao gravar na base. Nao funcionou
 				*/
-				console.log('Gravando o produto: ' + produto.titulo);
-
 				produtosDAO.salva(produto,function(err, results){
 					if (err) {
 						return next(err);

@@ -20,11 +20,6 @@ ProdutosDAO.prototype.salva = function(produto,callback){
 }
 
 ProdutosDAO.prototype.exclui = function(id,callback){
-
-	//var util = require('util');
-	//console.log('Excluindo o produto: ' + util.inspect(id));
-	console.log('Excluindo o produto: ' + id);
-
 	this._connection.query('delete from produtos where id = ?',  [id], callback);
 }
 
