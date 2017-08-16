@@ -40,9 +40,10 @@ module.exports = function(app){
 
 			});
 
+			connection.destroy();
         });
 
-		connection.end();
+		//connection.end();
 		
 	});
 
@@ -65,8 +66,6 @@ module.exports = function(app){
 	//always redirect after post - Para evitar que caso a pagina seja recarregada, o navegador faca outro post e grave informacao duplicada na base
 
 		var produto = request.body;
-		var connection = app.infra.connectionFactory(); 
-		var produtosDAO = new app.infra.ProdutosDAO(connection); 
 
 		/*validationErrors() esta deprecated
 		var validadorTitulo = request.assert('titulo','Título é obrigatório');
@@ -112,6 +111,8 @@ module.exports = function(app){
       			return;
 			}else{
 
+				var connection = app.infra.connectionFactory(); 
+				var produtosDAO = new app.infra.ProdutosDAO(connection); 
 				/*
 				Tem que ficar esperto com a natureza assincrona do node, porque eu havia colocado este bloco achando que o return 
 				da validacao acima iria parar a execucao e ele nao tentaria gravar no banco caso houvesse erro de validacao. Nao funcionou.
@@ -119,8 +120,10 @@ module.exports = function(app){
 				*/
 				produtosDAO.salva(produto,function(err, results){
 					if (err) {
+						connection.destroy();
 						return next(err);
 					}
+					connection.destroy();
 		            response.redirect('/produtos');
 		        });
 
@@ -144,8 +147,10 @@ module.exports = function(app){
 
 		produtosDAO.exclui(idProduto,function(err, results, next){
 			if(err){
+				connection.destroy();
 				return next(err);
 			}
+			connection.destroy();
             response.redirect('/produtos');
         });
 
