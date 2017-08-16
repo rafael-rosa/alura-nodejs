@@ -40,7 +40,10 @@ function createDBConnection(){
 				host:dadosConexao[3],
 				user:dadosConexao[1],
 				password:dadosConexao[2],
-				database:dadosConexao[4]
+				database:dadosConexao[4],
+				connectionLimit: 15,
+        		queueLimit: 30,
+				acquireTimeout: 1000000
 			});
 	}
 }
