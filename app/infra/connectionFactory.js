@@ -41,7 +41,7 @@ function createDBConnection(){
 				user:dadosConexao[1],
 				password:dadosConexao[2],
 				database:dadosConexao[4],
-				connectionLimit: 30, /*default 10*/
+				connectionLimit: 60, /*default 10*/
 				connectTimeout: 1000000,
         		/*queueLimit: 30,*/
 				acquireTimeout: 1000000
