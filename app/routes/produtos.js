@@ -5,8 +5,9 @@ module.exports = function(app){
 	app.get("/produtos",function(request,response,next){ //next é uma função que é o fluxo das funções que foram executadas no express:
 		
 		//var connection = connectionFactory(); //sem o require, connectionFactory nao existe mais neste contexto
-		var connection = app.infra.connectionFactory(); //o express-load disponibiliza o objeto desta forma apos carrega-lo
-		var produtosDAO = new app.infra.ProdutosDAO(connection); 
+		//var connection = app.infra.connectionFactory(); //o express-load disponibiliza o objeto desta forma apos carrega-lo
+		//var produtosDAO = new app.infra.ProdutosDAO(connection); 
+		var produtosDAO = new app.infra.ProdutosDAO(app); //mudanca para utilizar connection pool
 		/*
 		  A ideia do new é realmente criar um novo contexto de uso para a estrutura que está no arquivo produtosBanco.js. 
 		  Caso contrario, o this na classe produtosBanco iria referenciar um contexto global (do express load)
@@ -40,7 +41,7 @@ module.exports = function(app){
 
 			});
 
-			connection.destroy();
+			//connection.destroy();
         });
 
 		//connection.end();
@@ -111,8 +112,9 @@ module.exports = function(app){
       			return;
 			}else{
 
-				var connection = app.infra.connectionFactory(); 
-				var produtosDAO = new app.infra.ProdutosDAO(connection); 
+				//var connection = app.infra.connectionFactory(); 
+				//var produtosDAO = new app.infra.ProdutosDAO(connection); 
+				var produtosDAO = new app.infra.ProdutosDAO(app);
 				/*
 				Tem que ficar esperto com a natureza assincrona do node, porque eu havia colocado este bloco achando que o return 
 				da validacao acima iria parar a execucao e ele nao tentaria gravar no banco caso houvesse erro de validacao. Nao funcionou.
@@ -120,10 +122,10 @@ module.exports = function(app){
 				*/
 				produtosDAO.salva(produto,function(err, results){
 					if (err) {
-						connection.destroy();
+						//connection.destroy();
 						return next(err);
 					}
-					connection.destroy();
+					//connection.destroy();
 		            response.redirect('/produtos');
 		        });
 
@@ -142,15 +144,16 @@ module.exports = function(app){
 		//var util = require('util');
 		//console.log('Excluindo o produto: ' + util.inspect(idProduto));
 
-		var connection = app.infra.connectionFactory(); 
-		var produtosDAO = new app.infra.ProdutosDAO(connection); 
+		//var connection = app.infra.connectionFactory(); 
+		//var produtosDAO = new app.infra.ProdutosDAO(connection); 
+		var produtosDAO = new app.infra.ProdutosDAO(app);
 
 		produtosDAO.exclui(idProduto,function(err, results, next){
 			if(err){
-				connection.destroy();
+				//connection.destroy();
 				return next(err);
 			}
-			connection.destroy();
+			//connection.destroy();
             response.redirect('/produtos');
         });
 

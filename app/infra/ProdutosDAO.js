@@ -1,7 +1,7 @@
 /*
 Chamando o arquivo de ProdutosDAO, estamos seguindo uma convencao da orientacao a objetos
 */
-
+/*Desativado para utilizacao do pool de conexoes
 function ProdutosDAO(connection){
 	//this._connection = usar _ no nome de um atributo e uma convencao js para indicar que o atributo e privado e nao deve ser acessado por fora da classe
 	this._connection = connection;
@@ -26,11 +26,51 @@ ProdutosDAO.prototype.exclui = function(id,callback){
 ProdutosDAO.prototype.consulta = function(id,callback){
 	this._connection.query('select * from produtos where id = ?',  [id], callback);
 }
+*/
+
+function ProdutosDAO(app) {
+    this._app = app;
+}
+
+ProdutosDAO.prototype.lista = function(callback) {
+    this._app.infra.connectionFactory(function(err, connection) {
+        connection.query('select * from produtos', function(erros, results) {
+            connection.release();
+            callback(erros,results);
+        });
+    });
+};
+
+ProdutosDAO.prototype.salva = function(produto, callback) {
+    this._app.infra.connectionFactory(function(err, connection) {
+        connection.query('insert into produtos set ?', produto, function(erros, results) {
+            connection.release();
+            callback(erros,results);
+        });
+    });
+};
+
+ProdutosDAO.prototype.exclui = function(id,callback){
+    this._app.infra.connectionFactory(function(err, connection) {
+        connection.query('delete from produtos where id = ?',  [id], function(erros, results) {
+            connection.release();
+            callback(erros,results);
+        });
+    });
+};
+
+ProdutosDAO.prototype.consulta = function(id,callback){
+    this._app.infra.connectionFactory(function(err, connection) {
+        connection.query('select * from produtos where id = ?',  [id], function(erros, results) {
+            connection.release();
+            callback(erros,results);
+        });
+    });
+};
 
 module.exports = function(){
 	return ProdutosDAO;
 };
-
 
 
 /*
